@@ -30,6 +30,7 @@ pipeline {
             steps {
                 script {
                     echo "deploying"
+                    echo "testing webhook"
                     //gv.deployApp()
                 }
             }
