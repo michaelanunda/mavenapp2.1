@@ -30,8 +30,8 @@ pipeline {
             steps {
                 script {
                    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        def dockerCmdLogin = "echo ${PASSWORD} | docker login -u ${USERNAME} --password-stdin"
-                        def dockerCmdRun = 'docker run -p 3080:3080 -d uba31/demo-app:1.0'
+                        def dockerCmdLogin = "echo ${PASSWORD} | sudo docker login -u ${USERNAME} --password-stdin"
+                        def dockerCmdRun = 'sudo docker run -p 3080:3080 -d uba31/demo-app:1.0'
 
                         sshagent(['ec2-server-key']) {
                         // Wrap the shell commands in a multiline string, escaping EOF correctly
