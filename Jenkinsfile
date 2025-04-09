@@ -35,7 +35,7 @@ pipeline {
 
                         sshagent(['ec2-server-key']) {
                         // Dynamic IP handling, e.g., using an environment variable or config.
-                        def ec2Ip = "52.15.198.230" // Replace public IP of ec2 instance if not using an elastic ip
+                        def ec2Ip = '52.15.198.230' // Replace public IP of ec2 instance if not using an elastic ip
 
                         // Use multiline shell command with improved error handling
                         sh """
