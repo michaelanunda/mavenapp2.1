@@ -29,9 +29,14 @@ pipeline {
         stage("deploy") {
             steps {
                 script {
-                    echo "deploying"
-                    echo "testing webhook"
-                    //gv.deployApp()
+                   withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        def dockerCmdLogin = 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
+                        def dockerCmdRun = 'docker run -p 3080:3080 -d uba31/demo-app:1.0'
+
+                        sshagent(['ec2-server-key']) {
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@18.118.151.39 '${dockerCmdLogin}' '${dockerCmdRun}'"
+                        // Will need to edit the public ip of ec2-user every time the EC2 Instance has no elastic ip and is stopped or terminated and a new one is created
+                    }
                 }
             }
         }
