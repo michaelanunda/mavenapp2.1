@@ -36,10 +36,9 @@ pipeline {
                         sshagent(['ec2-server-key']) {
                         // Wrap the shell commands in a multiline string, escaping EOF correctly
                         sh """
-                            ssh -o StrictHostKeyChecking=no ec2-user@18.118.151.39 <<EOF
-                            ${dockerCmdLogin} 
+                            ssh -o StrictHostKeyChecking=no ec2-user@3.22.217.54
+                            ${dockerCmdLogin}
                             ${dockerCmdRun}
-                     EOF
                         """
                         // Note: Using <<'EOF' instead of <<EOF prevents variable interpolation within the block
                         // If you want to allow interpolation, simply remove the single quotes around EOF
