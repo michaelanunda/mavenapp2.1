@@ -34,12 +34,9 @@ pipeline {
                         def dockerCmdRun = 'docker run -p 3080:3080 -d uba31/demo-app:1.0'
 
                         sshagent(['ec2-server-key']) {
-                        // Dynamic IP handling, e.g., using an environment variable or config.
-                        def ec2Ip = '52.15.198.230' // Replace public IP of ec2 instance if not using an elastic ip
-
                         // Use multiline shell command with improved error handling
                         sh """
-                            ssh -o StrictHostKeyChecking=no ec2-user@${ec2Ip} <<EOF
+                            ssh -o StrictHostKeyChecking=no ec2-user@52.15.198.230 <<EOF
                             sudo yum install -y docker
                             sudo service docker start
                             sudo usermod -aG docker $USER
