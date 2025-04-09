@@ -39,7 +39,7 @@ pipeline {
                             ssh -o StrictHostKeyChecking=no ec2-user@18.118.151.39 <<EOF
                             ${dockerCmdLogin} 
                             ${dockerCmdRun}
-                            EOF
+                     EOF
                         """
                         // Note: Using <<'EOF' instead of <<EOF prevents variable interpolation within the block
                         // If you want to allow interpolation, simply remove the single quotes around EOF
