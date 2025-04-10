@@ -30,20 +30,12 @@ pipeline {
             steps {
                 script {
                    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        def dockerCmdLogin = "echo ${PASSWORD} | docker login -u ${USERNAME} --password-stdin"
-                        def dockerCmdRun = 'docker run -p 3080:3080 -d uba31/demo-app:1.0'
-
                         sshagent(['ec2-server-key']) {
-                        // Use multiline shell command with improved error handling
                         sh """
-                            ssh -o StrictHostKeyChecking=no ec2-user@52.15.198.230 <<EOF
-                            sudo yum install -y docker
-                            sudo service docker start
-                            sudo usermod -aG docker $USER
-                            docker --version
-                            ${dockerCmdLogin}
-                            ${dockerCmdRun}
-                         EOF
+                            ssh -o StrictHostKeyChecking=no ec2-user@18.117.138.48 << EOF
+                            echo "${PASSWORD}" | docker login -u "${USERNAME}" --password-stdin
+                            'docker run -p 3080:3080 -d uba31/demo-app:1.0'
+                            EOF
                         """
                     }
                 }
