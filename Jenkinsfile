@@ -34,7 +34,7 @@ pipeline {
                         sh """
                             ssh -o StrictHostKeyChecking=no ec2-user@18.117.138.48 << EOF
                             echo "${PASSWORD}" | docker login -u "${USERNAME}" --password-stdin
-                            'docker run -p 3080:3080 -d uba31/demo-app:1.0'
+                            docker run -p 3080:3080 -d uba31/demo-app:1.0
                             EOF
                         """
                     }
