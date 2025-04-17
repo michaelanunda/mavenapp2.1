@@ -43,7 +43,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sshagent(['ec2-server-key']) {
                         sh """
-                            ssh -o StrictHostKeyChecking=no ec2-user@3.133.128.252 '
+                            ssh -o StrictHostKeyChecking=no ec2-user@3.16.83.40 '
                             docker run -p 8080:8080 -d "${env.IMAGE_NAME_TAG}"
                             '
                         """
