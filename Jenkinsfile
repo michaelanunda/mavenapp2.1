@@ -44,9 +44,8 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sshagent(['ec2-server-key']) {
                         sh """
-                            scp docker-compose.yaml ec2-user@3.149.4.132:/home/ec2-user '
+                            scp docker-compose.yaml ec2-user@3.149.4.132:/home/ec2-user
                             ssh -o StrictHostKeyChecking=no ec2-user@3.149.4.132 "${dockerComposeCmd}"
-                            '
                         """
                     }
                 }
