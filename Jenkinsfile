@@ -39,12 +39,13 @@ pipeline {
         stage("deploy") {
             steps {
                 script {
-                    echo 'deploying docker image to EC2...'
+                    echo 'deploying docker-compose.yaml file to EC2...'
+                    def dockerComposeCmd = "docker-compose -f docker-compose.yaml up --detach"
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sshagent(['ec2-server-key']) {
                         sh """
-                            ssh -o StrictHostKeyChecking=no ec2-user@3.16.83.40 '
-                            docker run -p 8080:8080 -d "${env.IMAGE_NAME_TAG}"
+                            scp docker-compose.yaml ec2-user@3.149.4.132:/home/ec2-user '
+                            ssh -o StrictHostKeyChecking=no ec2-user@3.149.4.132 "${dockerComposeCmd}"
                             '
                         """
                     }
