@@ -39,13 +39,14 @@ pipeline {
         stage("deploy") {
             steps {
                 script {
-                    echo 'deploying docker-compose.yaml file to EC2...'
-                    def dockerComposeCmd = "docker-compose -f docker-compose.yaml up --detach"
+                    echo 'deploying server-cmds.sh file to EC2...'
+                    def shellCmd = "bash ./server-cmds.sh"
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sshagent(['ec2-server-key']) {
                         sh """
+                            scp -o StrictHostKeyChecking=no server-cmds.sh ec2-user@52.14.193.87:/home/ec2-user
                             scp -o StrictHostKeyChecking=no docker-compose.yaml ec2-user@52.14.193.87:/home/ec2-user
-                            ssh -o StrictHostKeyChecking=no ec2-user@52.14.193.87 "${dockerComposeCmd}"
+                            ssh -o StrictHostKeyChecking=no ec2-user@52.14.193.87 "${shellCmd}"
                         """
                     }
                 }
