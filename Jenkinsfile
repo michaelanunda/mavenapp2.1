@@ -44,9 +44,9 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sshagent(['ec2-server-key']) {
                         sh """
-                            scp -o StrictHostKeyChecking=no server-cmds.sh ec2-user@52.14.193.87:/home/ec2-user
-                            scp -o StrictHostKeyChecking=no docker-compose.yaml ec2-user@52.14.193.87:/home/ec2-user
-                            ssh -o StrictHostKeyChecking=no ec2-user@52.14.193.87 "${shellCmd}"
+                            scp -o StrictHostKeyChecking=no server-cmds.sh ec2-user@18.224.34.248:/home/ec2-user
+                            scp -o StrictHostKeyChecking=no docker-compose.yaml ec2-user@18.224.34.248:/home/ec2-user
+                            ssh -o StrictHostKeyChecking=no ec2-user@18.224.34.248 "${shellCmd}"
                         """
                     }
                 }
