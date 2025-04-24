@@ -14,8 +14,8 @@ pipeline {
           }
     environment {
             IMAGE_NAME = 'uba31/demo-app'
-            IMAGE_TAG = 'java-maven-1.0'
-            IMAGE_NAME_TAG = 'uba31/demo-app:java-maven-1.0'
+            IMAGE_TAG = 'java-maven-2.0'
+            IMAGE_NAME_TAG = 'uba31/demo-app:java-maven-2.0'
           }
     stages {
         stage("build app") {
@@ -40,7 +40,7 @@ pipeline {
             steps {
                 script {
                     echo 'deploying server-cmds.sh file to EC2...'
-                    def shellCmd = "bash ./server-cmds.sh"
+                    def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME_TAG}"
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sshagent(['ec2-server-key']) {
                         sh """
