@@ -14,10 +14,17 @@ pipeline {
           }
     environment {
             IMAGE_NAME = 'uba31/demo-app'
-            IMAGE_TAG = 'java-maven-2.0'
-            IMAGE_NAME_TAG = 'uba31/demo-app:java-maven-2.0'
           }
     stages {
+        stage("set image tag") {
+            steps {
+                script {
+                    IMAGE_TAG = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+                    env.IMAGE_TAG = IMAGE_TAG
+                    env.IMAGE_NAME_TAG = "${env.IMAGE_NAME}:${IMAGE_TAG}"
+                }
+            }
+        }
         stage("build app") {
             steps {
                 script {
@@ -40,13 +47,14 @@ pipeline {
             steps {
                 script {
                     echo 'deploying server-cmds.sh file to EC2...'
-                    def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME_TAG}"
+                    def shellCmd = "bash ./server-cmds.sh ${env.IMAGE_NAME_TAG}"
+                    def ec2Instance = "ec2-user@3.141.25.161"
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sshagent(['ec2-server-key']) {
                         sh """
-                            scp -o StrictHostKeyChecking=no server-cmds.sh ec2-user@18.224.34.248:/home/ec2-user
-                            scp -o StrictHostKeyChecking=no docker-compose.yaml ec2-user@18.224.34.248:/home/ec2-user
-                            ssh -o StrictHostKeyChecking=no ec2-user@18.224.34.248 "${shellCmd}"
+                            scp -o StrictHostKeyChecking=no server-cmds.sh ${ec2Instance}:/home/ec2-user
+                            scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2Instance}:/home/ec2-user
+                            ssh -o StrictHostKeyChecking=no ${ec2Instance} "${shellCmd}"
                         """
                     }
                 }
