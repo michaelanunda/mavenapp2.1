@@ -20,7 +20,7 @@ pipeline {
             steps {
                 script {
                     IMAGE_TAG = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
-                    env.IMAGE_TAG = IMAGE_TAG
+                    env.IMAGE_TAG = "java-maven-${env.IMAGE_TAG}"
                     env.IMAGE_NAME_TAG = "${env.IMAGE_NAME}:${IMAGE_TAG}"
                 }
             }
