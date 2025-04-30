@@ -48,16 +48,11 @@ pipeline {
                 script {
                     echo 'deploying server-cmds.sh file to EC2...'
                     def shellCmd = "bash ./server-cmds.sh ${env.IMAGE_NAME_TAG}"
-                    def ec2Instance = "ec2-user@3.137.189.123" //this needs to be changed everytime the t4g nano instance is stopped, restarted (maybe???), or terminated then recreated again
+                    def ec2Instance = "ec2-user@3.145.174.36" //this needs to be changed every time the t4g nano instance is stopped, restarted (maybe???), or terminated then recreated again
+                    def ec2Path = "/home/ec2-user"
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sshagent(['ec2-server-key']) {
-                        ec2Deploy(shellCmd, ec2Instance)
-                        
-                        // sh """
-                        //     scp -o StrictHostKeyChecking=no server-cmds.sh ${ec2Instance}:/home/ec2-user
-                        //     scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2Instance}:/home/ec2-user
-                        //     ssh -o StrictHostKeyChecking=no ${ec2Instance} "${shellCmd}"
-                        // """
+                        ec2Deploy(ec2Instance, shellCmd, ec2Path)
                     }
                 }
             }
