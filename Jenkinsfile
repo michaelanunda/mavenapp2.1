@@ -40,7 +40,7 @@ pipeline {
             steps {
                 script {
                     def shellCmd = "bash ./server-cmds.sh ${env.IMAGE_NAME_TAG}"
-                    def ec2Instance = "ec2-user@18.118.208.195" //this needs to be changed every time the t4g nano instance is stopped, restarted (maybe???), or terminated then recreated again
+                    def ec2Instance = "ec2-user@3.137.183.232" //this needs to be changed every time the t4g nano instance is stopped, restarted (maybe???), or terminated then recreated again
                     def ec2Path = "/home/ec2-user"
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sshagent(['ec2-server-key']) {
