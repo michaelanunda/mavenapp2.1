@@ -28,16 +28,7 @@ pipeline {
         stage('increment version') { // Nana's approach
             steps {
                 script {
-                    echo 'incrementing app version...'
-                    sh 'mvn build-helper:parse-version versions:set \
-                        -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} \
-                        versions:commit'
-                    def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
-                    def version = matcher[0][1]
-                    env.pomVersion = "${version}"
-                    env.IMAGE_NAME = "uba31/demo-app"
-                    env.IMAGE_TAG = "${version}-${env.BUILD_NUMBER}"
-                    env.IMAGE_NAME_TAG = "${env.IMAGE_NAME}:${env.IMAGE_TAG}"
+                    incrementVersion()
                 }
             }
         }
