@@ -53,7 +53,7 @@ pipeline {
     stage('commit and push changes') {
             steps {
                 script {
-                    commitAndPush(env.pomVersion)
+                    commitAndPushChanges(env.pomVersion)
                 }
             }
         }  
