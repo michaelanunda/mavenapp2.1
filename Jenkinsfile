@@ -53,9 +53,7 @@ pipeline {
     stage('commit and push changes') {
             steps {
                 script {
-                     withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_TOKEN')]) {
-                        new Docker(this).commitAndPushChanges(env.pomVersion)
-                }
+                    commitAndPushChanges(env.pomVersion)
                 }
             }
         }  
