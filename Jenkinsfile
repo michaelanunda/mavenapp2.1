@@ -53,7 +53,9 @@ pipeline {
     stage('commit and push changes') {
             steps {
                 script {
-                    commitAndPushChanges(env.pomVersion)
+                     withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_TOKEN')]) {
+                        commitAndPushChanges(env.pomVersion)   
+                }
                 }
             }
         }  
