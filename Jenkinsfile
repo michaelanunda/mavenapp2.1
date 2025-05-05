@@ -34,7 +34,8 @@ pipeline {
                         versions:commit'
                     def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
                     def version = matcher[0][1]
-                    env.IMAGE_NAME = "uba31/java-maven-app"
+                    env.pomVersion = "${version}"
+                    env.IMAGE_NAME = "uba31/demo-app"
                     env.IMAGE_TAG = "${version}-${env.BUILD_NUMBER}"
                     env.IMAGE_NAME_TAG = "${env.IMAGE_NAME}:${env.IMAGE_TAG}"
                 }
@@ -62,7 +63,7 @@ pipeline {
             steps {
                 script {
                     echo 'deploying server-cmds.sh file to EC2...'
-                    def shellCmd = "bash ./server-cmds.sh ${env.IMAGE_NAME}"
+                    def shellCmd = "bash ./server-cmds.sh ${env.IMAGE_NAME_TAG}"
                     def ec2Instance = "ec2-user@18.118.208.195" //this needs to be changed every time the t4g nano instance is stopped, restarted (maybe???), or terminated then recreated again
                     def ec2Path = "/home/ec2-user"
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
@@ -87,7 +88,7 @@ pipeline {
                             git branch
                             git config --list
                             git add .
-                            git commit -m "Incremented version to ${env.IMAGE_NAME}"
+                            git commit -m "Incremented version of pom.xml to ${env.pomVersion}"
                             git push https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/michaelanunda/mavenapp2.1.git HEAD:starting-code
                         """
                     }
