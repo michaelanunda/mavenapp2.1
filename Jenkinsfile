@@ -34,7 +34,9 @@ pipeline {
                         versions:commit'
                     def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
                     def version = matcher[0][1]
-                    env.IMAGE_NAME = "${version}-${env.BUILD_NUMBER}"
+                    env.IMAGE_NAME = "uba31/java-maven-app"
+                    env.IMAGE_TAG = "${version}-${env.BUILD_NUMBER}"
+                    env.IMAGE_NAME_TAG = "${env.IMAGE_NAME}:${env.IMAGE_TAG}"
                 }
             }
         }
@@ -50,9 +52,9 @@ pipeline {
             steps {
                 script {
                     echo "building the docker image"
-                    buildImage(env.IMAGE_NAME)
+                    buildImage(env.IMAGE_NAME_TAG)
                     dockerLogin()
-                    dockerPush(env.IMAGE_NAME)
+                    dockerPush(env.IMAGE_NAME_TAG)
                 }
             }
         }
